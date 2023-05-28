@@ -54,13 +54,15 @@ async function main() {
         //@ts-ignore
         socket.emit('display-message',JSON.stringify({participant1:roomExists.participant_1_id, participant2: roomExists.participant_2_id}))
         const messages = await getRoomMessages(roomExists.chatRoom_id);
-        socket.emit("display-messages", { messages: messages });
+        ioServer.emit("display-messages", { messages: messages });
       }
+      
     });
     
     socket.on("message", async (message) => {
       
       const parsedMessage = JSON.parse(message);
+      console.log("****", parsedMessage);
 
    
       const getRoom = await checkIfRoomWithParticipantsExists(parsedMessage.creatorId, parsedMessage.receiverId)
@@ -75,7 +77,7 @@ async function main() {
 
       if (storeMessage?.affectedRows) {
         const messages = await getRoomMessages(getRoom.chatRoom_id)
-        socket.emit("display-messages", { messages: messages });
+        ioServer.emit("display-messages", { messages: messages });
       }
     });
   });
