@@ -42,6 +42,12 @@ async function main() {
       );
       if (!roomExists) {
         createChatRoom(adminUserId.id, data.userId);
+
+        const getNewlyCreatedRoom = await checkIfRoomWithParticipantsExists(
+          adminUserId.id,
+          data.userId
+        );
+        socket.emit('display-message',JSON.stringify({participant1:getNewlyCreatedRoom.participant_1_id, participant2: getNewlyCreatedRoom.participant_2_id}))
         // console.log('dd ', {participant1:roomExists.participant_1_id, participant2: roomExists.participant_2_id})
         // socket.emit('display-message',JSON.stringify({participant1:roomExists.participant_1_id, participant2: roomExists.participant_2_id}))
       } else {
